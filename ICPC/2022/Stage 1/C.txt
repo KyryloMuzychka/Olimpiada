@@ -1,0 +1,105 @@
+#include <bits/stdc++.h>
+#define ll long long
+#define vi vector<ll>
+#define pii pair<ll,ll>
+#define all(v) v.begin(),v.end()
+using namespace std;
+void solve()
+{
+	ll n;
+	cin>>n;
+	vector<pii> xa,ya;
+	map<pii,int> ind1;
+	for(ll i=0;i<n;++i)
+	{
+		ll x,y;
+		cin>>x>>y;
+		ind1[make_pair(x,y)]=i;
+		if(x==0){
+			ya.push_back(make_pair(y,x));
+		}
+		else{
+			xa.push_back(make_pair(x,y));
+		}
+	}
+	sort(all(xa));
+	sort(all(ya));
+	
+	ll mix=1e10;
+	ll miy=1e10;
+	for(ll i=0;i<xa.size();++i)
+			mix=min(mix,abs(xa[i].first));
+
+	for(ll i=0;i<ya.size();++i)
+			miy=min(miy,abs(ya[i].first));
+
+	vector<pair<int,double>> result;
+
+	double mi1,mi2,mi3;
+	double mi12;
+	for(ll i=0;i<xa.size();++i)
+	{
+		if(i==0)
+			mi1=1e10;
+		else
+			mi1=sqrt(pow(xa[i].first-xa[i-1].first,2));
+		if(i==xa.size()-1)
+			mi2=1e10;
+		else
+			mi2=sqrt(pow(xa[i].first-xa[i+1].first,2));
+		mi12 = min(mi1,mi2);
+		double x2=xa[i].first*xa[i].first;
+		mi3=sqrt(x2+miy*miy);
+		mi12 = min(mi12,mi3);
+		int index=ind1[xa[i]];
+		result.push_back(make_pair(index,mi12));
+	}
+	for(ll i=0;i<ya.size();++i)
+	{
+		if(i==0)
+			mi1=1e10;
+		else
+			mi1=sqrt(pow(ya[i].first-ya[i-1].first,2));
+		if(i==ya.size()-1)
+			mi2=1e10;
+		else
+			mi2=sqrt(pow(ya[i].first-ya[i+1].first,2));
+		double y2=ya[i].first*ya[i].first;
+		mi12=min(mi1,mi2);
+		mi3=sqrt(y2+mix*mix);
+		mi12 = min(mi12,mi3);
+		int index=ind1[make_pair(ya[i].second,ya[i].first)];
+		result.push_back(make_pair(index,mi12));
+	}
+	sort(all(result));
+	cout<<fixed;
+	cout<<setprecision(6);
+	for(auto &el:result)
+		cout<<el.second<<" ";
+	cout<<endl;
+}
+
+int main()
+{
+	ios::sync_with_stdio(false);
+	cin.tie(0);
+	ll t;
+	cin>>t;
+	while(t--){
+	solve();
+	}
+	return 0;
+}
+//int a[maxn], mn[logn][maxn];
+//
+//int rmq(int l, int r) { 
+//    int t = __lg(r - l);
+//    return min(mn[t][l], mn[t][r - (1 << t)]);
+//}
+//
+//
+//memcpy(mn[0], a, sizeof a);
+//
+//for (int l = 0; l < logn - 1; l++)
+//    for (int i = 0; i + (2 << l) <= n; i++)
+//        mn[l+1][i] = min(mn[l][i], mn[l][i + (1 << l)]);
