@@ -1,0 +1,8 @@
+.vscode
+.forceignore
+.sfdx/
+.vscode/
+config/
+sfdx-project.json
+bmp
+.DS_Store
